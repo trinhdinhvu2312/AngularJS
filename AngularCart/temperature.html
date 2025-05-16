@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html ng-app="tempApp">
+    <head>
+        <meta charset="UTF-8">
+        <title>Temperature Monitor</title>
+        <script
+            src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+        <style>
+    body { font-family: Arial; padding: 20px; }
+    input, button { margin: 5px; }
+  </style>
+    </head>
+    <body ng-controller="TempController">
+        <h2>Temperature Monitor</h2>
+        <input type="number" ng-model="newTemp" placeholder="Add Temperature"
+            ng-keypress="checkEnter($event)">
+        <button ng-click="addTemp()">Add</button>
+        <button ng-click="getMedian()">Get Median Temperature</button>
+
+        <p><strong>Current state of the list:</strong> {{
+            temperatures.join(', ') }}</p>
+        <p><strong>Current Median:</strong> {{ median }}</p>
+
+        <script>
+    angular.module('tempApp', [])
+      .controller('TempController', function($scope) {
+        $scope.temperatures = [];
+        $scope.newTemp = '';
+        $scope.median = '';
+
+        $scope.addTemp = function() {
+          if ($scope.newTemp !== '') {
+            $scope.temperatures.push(Number($scope.newTemp));
+            $scope.newTemp = '';
+          }
+        };
+
+        $scope.checkEnter = function(event) {
+          if (event.keyCode === 13) $scope.addTemp();
+        };
+
+        $scope.getMedian = function() {
+          let sorted = $scope.temperatures.slice().sort((a, b) => a - b);
+          let len = sorted.length;
+          if (len === 0) {
+            $scope.median = 'No data';
+            return;
+          }
+          let mid = Math.floor(len / 2);
+          $scope.median = len % 2 === 0
+            ? ((sorted[mid - 1] + sorted[mid]) / 2).toFixed(2)
+            : sorted[mid];
+        };
+      });
+  </script>
+    </body>
+</html>

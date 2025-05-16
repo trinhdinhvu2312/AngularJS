@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html ng-app="shopApp">
+    <head>
+        <meta charset="UTF-8">
+        <title>Shopping Cart</title>
+        <script
+            src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+        <style>
+    body { font-family: Arial; padding: 20px; }
+    input, button { margin: 5px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; }
+  </style>
+    </head>
+    <body ng-controller="CartController">
+        <h2>Welcome to the GA Camping Store</h2>
+
+        <label>Filtering input:</label>
+        <input type="text" ng-model="filterText">
+
+        <table>
+            <tr>
+                <th>Category</th><th>Description</th><th>Price</th><th>Action</th>
+            </tr>
+            <tr ng-repeat="item in items | filter:filterText">
+                <td>{{ item.category }}</td>
+                <td>{{ item.description }}</td>
+                <td>${{ item.price.toFixed(2) }}</td>
+                <td><button ng-click="addToCart(item)">Add to Cart</button></td>
+            </tr>
+        </table>
+
+        <h3>Your Cart:</h3>
+        <ul>
+            <li ng-repeat="(desc, item) in cart">
+                {{ item.qty }}x {{ desc }} = ${{ (item.qty *
+                item.price).toFixed(2) }}
+            </li>
+        </ul>
+        <p><strong>Total:</strong> ${{ getTotal().toFixed(2) }}</p>
+        <button ng-click="clearCart()">Clear Cart</button>
+
+        <script>
+    angular.module('shopApp', [])
+      .controller('CartController', function($scope) {
+        $scope.items = [
+          { category: 'flashlight', description: 'small flashlight', price: 6.99 },
+          { category: 'flashlight', description: 'big flashlight', price: 12.99 },
+          { category: 'sleeping bag', description: 'simple sleeping bag', price: 49.99 },
+          { category: 'sleeping bag', description: 'deluxe sleeping bag', price: 79.99 },
+          { category: 'stove', description: 'small stove', price: 29.99 },
+          { category: 'stove', description: 'big stove', price: 29.99 },
+          { category: 'tent', description: '1-person tent', price: 119.99 },
+          { category: 'tent', description: '2-person tent', price: 169.99 },
+          { category: 'tent', description: '3-person tent', price: 249.99 },
+          { category: 'tent', description: '4-person tent', price: 319.99 },
+          { category: 'water bottle', description: 'small water bottle', price: 2.99 },
+          { category: 'water bottle', description: 'large water bottle', price: 2.99 }
+        ];
+
+        $scope.cart = {};
+
+        $scope.addToCart = function(item) {
+          if (!$scope.cart[item.description]) {
+            $scope.cart[item.description] = { price: item.price, qty: 1 };
+          } else {
+            $scope.cart[item.description].qty++;
+          }
+        };
+
+        $scope.getTotal = function() {
+          let total = 0;
+          for (let key in $scope.cart) {
+            total += $scope.cart[key].price * $scope.cart[key].qty;
+          }
+          return total;
+        };
+
+        $scope.clearCart = function() {
+          $scope.cart = {};
+        };
+      });
+  </script>
+    </body>
+</html>

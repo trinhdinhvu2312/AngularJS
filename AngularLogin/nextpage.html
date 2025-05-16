@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>nextpage</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+	<style>
+		form>div>div{float: left;width: 180px;text-align: right;}
+		form>div{margin-bottom: 4px;}
+	</style>
+</head>
+<body style="background:darkblue;" ng-app="myApp" ng-controller="myCtrl">
+	<div style="background:white;border: black 5px double;width: 800px;margin: auto;">
+		<h2 style="text-align:center;">Student management</h2>
+		<form style="font-weight:bold;">
+			<div>
+				<div><label>Student name:</label></div><input type="text" ng-model="name" autocomplete="off" autofocus placeholder="Input student name" required>
+			</div>
+			<div>
+				<div><label>Student DOB:</label></div><input type="date" id="date" ng-model="date">
+			</div>
+			<div>
+				<div><label>Student gender:</label></div><input type="radio" name="gender" ng-model="gt" value="Male">Male<input type="radio" name="gender" ng-model="gt" value="Female">Female
+			</div>
+			<div>
+				<div><label>Student Language:</label></div>
+				<input type="checkbox" name="language" ng-model="language.English">English
+				<input type="checkbox" name="language" ng-model="language.Vietnamese">Vietnamese
+				<input type="checkbox" name="language" ng-model="language.Japanese">Japanese
+				<input type="checkbox" name="language" ng-model="language.Chinese">Chinese
+				<input type="checkbox" name="language" ng-model="language.French">French
+			</div>
+			<div>
+				<div><label>Student class:</label></div>
+				<select ng-model="classs.model" >
+					<option ng-repeat="x in classs.options" value="{{x.id}}">{{x.id}}</option>
+
+				</select>
+				<label style="color:blue; cursor:pointer;"><u ng-click="addClas()">Add class</u></label>
+			</div>
+			<div style="margin:0px 0px 60px 180px;">
+				<input type="submit" value="Add" ng-click="addStudent()">
+			</div>
+		</form>
+
+		<div>
+			<h2 style="text-align:center">Student List</h2>
+			<table border="1" cellpadding="0" cellspacing="0" width="100%">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Class</th>
+						<th>Gender</th>
+						<th>DOB</th>
+						<th>Language</th>
+						<th> </th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="x in students">
+						<td>{{x.name}}</td>
+						<td>{{x.clas}}</td>
+						<td>{{x.gender}}</td>
+						<td>{{x.dob | date:'MM/dd/yyyy'}}</td>
+						<td>{{x.language }}</td>
+						<td style="color:blue; cursor: pointer;" ng-click="delete($index)"><u>Delete</u></td>
+					</tr>
+					<tr>
+						<td colspan="6" style="text-align:right;"><label style="font-weight:bold;">Total: </label><u>{{soluong + ' student'}}</u></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+<script>
+	let app=angular.module('myApp', []);
+	app.controller('myCtrl',function($scope){
+		$scope.classs={
+			model:null,
+			options:[
+				{id:'C2108G2'},{id:'C2108G3'},{id:'C2109L'}
+			]
+		}
+		$scope.students=[
+		{name:'Nguyen Van A',clas:'C1610L',gender:'Male',dob:'20/10/1990',language:'Vietnamese, Chinese'},
+		{name:'Tran Thi B',clas:'C1608I',gender:'Female',dob:'03/02/1991',language:'Vietnamese, English, Japanese'},
+		{name:'Pham Thanh C',clas:'C1708I',gender:'Female',dob:'03/02/1991',language:'Vietnamese, English, Japanese'},
+		];
+		$scope.soluong=$scope.students.length
+		$scope.addStudent=function(){
+			if($scope.name.length!=0){
+				let count=0;
+				$scope.ngng=""
+					if($scope.language.English==true){
+						$scope.ngng+='English'
+						count=1;
+					}
+					if($scope.language.Vietnamese==true){
+						if(count==1){
+						$scope.ngng+=', Vietnamese'
+
+						}else{
+						$scope.ngng+='Vietnamese'
+						count=1;
+						}
+					}
+					if($scope.language.Japanese==true){
+						if(count==1){
+						$scope.ngng+=', Japanese'
+
+						}else{
+						$scope.ngng+='Japanese'
+						count=1;
+						}
+					}
+					if($scope.language.Chinese==true){
+						if(count==1){
+						$scope.ngng+=', Chinese'
+
+						}else{
+						$scope.ngng+='Chinese'
+						count=1;
+						}
+					}
+					if($scope.language.French==true){
+						if(count==1){
+						$scope.ngng+=', French'
+
+						}else{
+						$scope.ngng+='French'
+						count=1;
+						}
+					}
+					console.log(count)
+
+
+				$scope.students.push({name:$scope.name,clas:$scope.classs.model,gender:$scope.gt,dob:$scope.date,language:$scope.ngng});
+				$scope.soluong=$scope.students.length
+			}
+		}
+		$scope.delete=function(x){
+			if(confirm("Are you sure?")){
+				$scope.students.splice(x,1);
+			}
+		$scope.soluong=$scope.students.length
+		}
+		$scope.addClas=function(){
+			let v = prompt("Input ney class name.");
+			$scope.classs.options.push({id:v});
+		}
+	}); 	
+</script>
+</body>
+</html>

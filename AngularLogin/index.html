@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Login</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.js"></script>
+	<style>
+		label{float: left; text-align: right; width: 100px;}
+		h2{text-align: center;}
+		body{background:#2c2ce0;}
+
+	</style>
+</head>
+<body ng-app="myApp" ng-controller="myController">
+	<div style="margin: auto;width: 300px;border: black 3px solid; height: 200px;background: white;">
+	<form>
+		<h2>Login</h2>
+		<div>
+			<label>Username:</label><input type="text" id="username" autocomplete="off" placeholder="Input username">
+			<label>Password:</label><input type="password" id="password" placeholder="Input password">
+			<label>&nbsp;</label>
+			<input type="button"onclick="event.preventDefault();kiemTra()" value="Login">
+		</div>
+	</form>
+</div>
+<script>
+	function kiemTra(){
+		let name = document.getElementById('username').value;
+		let passw = document.getElementById('password').value;
+		if(name=='admin' && passw =='123456'){
+			alert("Login succes! \nRedirecting to next page...")
+			window.location.href=("./nextpage.html");
+		}else{
+			alert("Login failed! \nIncorrext username or password!")
+		}
+	};
+</script>
+ <border>
+</body>
+</html>
